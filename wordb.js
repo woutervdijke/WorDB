@@ -4,12 +4,11 @@ var _ = require('underscore'); // Underscore enables the .isEmpty() method
 var prompt = require('prompt');
 
 var collection = fs.readFileSync('collection.txt').toString(); //read the collection file
-collection = collection.replace(/(\r\n|\n|\r)|<\/p>|<p>|\(|\)|'|"|\,|\:|\.|\?/gm, "").toLowerCase(); //pre-process to remove interpunction, line breaks and uppercase letters.
+collection = collection.replace(/(\r\n|\n|\r)|<\/p>|<p>|\(|\)|'|"|,|:|\.|\?/gm, "").toLowerCase(); //pre-process to remove interpunction, line breaks and uppercase letters.
 
 var articles = collection.split('</doc>'); // split the collection file into the different articles
 var articleCount = articles.length-1; // for some reason articles.length is 1 higher than the actual number of articles
 var articleArray = [];
-
 
 // put all articles in an array
 for (var i=0; i < articleCount; i++) {
@@ -19,7 +18,6 @@ for (var i=0; i < articleCount; i++) {
 // split the articles into lists of words
 for (var w=0; w < articleCount; w++) {
 	 articleArray[w][1] = articleArray[w][1].split(' ').sort();}
-
 
 // put the word count for each word in the array
 for (var x=0; x < articleCount; x++) {
@@ -49,21 +47,15 @@ for (var x=0; x < articleCount; x++) {
 		}
 	}
 }
-
+// the prompt part makes it a bit more
 prompt.start();
 
 prompt.get(['wordToSearch'], function (err, result) {
 	if (err) { return onErr(err); }
 	console.log('Command-line input received:');
 	console.log('  Word to search: ' + result.wordToSearch);
-	console.log(wordlist[result.wordToSearch])
+	console.log(wordlist[result.wordToSearch]);
 	for (var x=1; x < articleCount; x++) {
 		console.log(wordlist[result.wordToSearch+x])
 	}
-
 });
-
-/*console.log(wordlist.a0);
-console.log(wordlist.a1);
-console.log(wordlist.a2);
-*/
