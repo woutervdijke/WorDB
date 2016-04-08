@@ -40,11 +40,7 @@ var wordlist = {}; // create an empty object to contain the wordlist
 //put each word in the wordlist with the count and docid as values
 for (var x=0; x < articleCount; x++) {
 	for (var y=0; y < articleArray[x][1].length; y++) {
-		if (_.isEmpty(wordlist[articleArray[x][1][y]])) {
-			wordlist[articleArray[x][1][y]] = {count: articleArray[x][2][y], docid: articleArray[x][3][y]};
-		} else {
-			wordlist[articleArray[x][1][y]+x] = {count: articleArray[x][2][y], docid: articleArray[x][3][y]}
-		}
+			wordlist[articleArray[x][1][y]+x] = {count: articleArray[x][2][y], docid: articleArray[x][3][y]};
 	}
 }
 // the prompt part makes it a bit more
@@ -54,8 +50,7 @@ prompt.get(['wordToSearch'], function (err, result) {
 	if (err) { return onErr(err); }
 	console.log('Command-line input received:');
 	console.log('  Word to search: ' + result.wordToSearch);
-	console.log(wordlist[result.wordToSearch]);
-	for (var x=1; x < articleCount; x++) {
+	for (var x=0; x < articleCount; x++) {
 		console.log(wordlist[result.wordToSearch+x])
 	}
 });
