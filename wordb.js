@@ -1,6 +1,11 @@
+var wordToSearch = 'enterHERE'; //enter here which word to reference in the hash table
+
+
+/* below here is the code to make it work */
 var fs = require('fs'); // File System is required to read the collection file
 var sugar = require('sugar'); // Sugar enables the .count() method
 var prompt = require('prompt'); //
+var _ = require('underscore'); // Underscore enables .isEmpty
 
 var collection = fs.readFileSync('collection.txt').toString(); //read the collection file
 collection = collection.replace(/(\r\n|\n|\r)|<\/p>|<p>|\(|\)|'|"|,|:|\.|\?/gm, "").toLowerCase(); //pre-process to remove interpunction, line breaks and uppercase letters.
@@ -30,18 +35,13 @@ var wordlist = {}; // create an empty object to contain the wordlist
 //put each word in the wordlist with the count and docid as values
 for (var x=0; x < articleCount; x++) {
 	for (var y=0; y < articleArray[x][1].length; y++) {
-			wordlist[articleArray[x][1][y]+x] = {count: articleArray[x][2][y], docid: articleArray[x][3][y]};
+			wordlist[articleArray[x][1][y]+x] = {doc: x+1, count: articleArray[x][2][y]};
 	}
 }
 
-// the prompt part makes it a bit more interactive
-prompt.start();
-
-prompt.get(['wordToSearch'], function (err, result) {
-	if (err) { return onErr(err); }
-	console.log('Command-line input received:');
-	console.log('  Word to search: ' + result.wordToSearch);
-	for (var x=0; x < articleCount; x++) {
-		console.log(wordlist[result.wordToSearch+x])
+console.log('  Word to search: ' + wordToSearch);
+for (var x=0; x < articleCount; x++) {
+	if (_.isUndefined(wordlist[wordToSearch+x]) == false) {  // if-statement filters so it only returns documents where the word is found
+		console.log(wordlist[wordToSearch + x]);
 	}
-});
+}
