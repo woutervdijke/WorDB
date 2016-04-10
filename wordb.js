@@ -39,9 +39,45 @@ for (var x=0; x < articleCount; x++) {
 	}
 }
 
-console.log('  Word to search: ' + wordToSearch);
+/* console.log('  Word to search: ' + wordToSearch);
 for (var x=0; x < articleCount; x++) {
 	if (_.isUndefined(wordlist[wordToSearch+x]) == false) {  // if-statement filters so it only returns documents where the word is found
 		console.log(wordlist[wordToSearch + x]);
 	}
+} */
+
+
+/* below here, the histogram is generated */
+
+var allArticles = [];
+
+for (var x=0; x < articleCount; x++) { // push all articles into one array
+	allArticles.push(articleArray[x][1]);
 }
+
+for (var x=1; x < articleCount; x++) { // push all words together in the array
+	for (var y=0; y < articleArray[x][1].length; y++) {
+		allArticles[0].push(articleArray[x][1][y]);
+	}
+	allArticles[x] = [];
+}
+
+allArticles[0] = allArticles[0].sort();
+
+// put the word count for each word in the array
+allArticles[1] = [];
+for (var y=0; y < allArticles[0].length; y++) {
+		allArticles[1][y] = allArticles[0].count(allArticles[0][y]);
+	}
+
+var wordcountlist = {}; // create an empty object to contain the wordlist
+
+//put each word in the wordcountlist  as object with the count as value
+for (var y=0; y < allArticles[0].length; y++) {
+		wordcountlist[allArticles[0][y]] = {count: allArticles[1][y]};
+}
+
+var allWordcounts = Object.keys(wordcountlist).map(k => wordcountlist[k].count);
+
+console.log(allWordcounts.length);
+
