@@ -4,8 +4,8 @@ var wordToSearch = 'enterHERE'; //enter here which word to reference in the hash
 /* below here is the code to make it work */
 var fs = require('fs'); // File System is required to read the collection file
 var sugar = require('sugar'); // Sugar enables the .count() method
-var prompt = require('prompt'); //
 var _ = require('underscore'); // Underscore enables .isEmpty
+var plotly = require('plotly')("woutervdijke", "uldyoki8fg"); // Plotly creates the histogram
 
 var collection = fs.readFileSync('collection.txt').toString(); //read the collection file
 collection = collection.replace(/(\r\n|\n|\r)|<\/p>|<p>|\(|\)|'|"|,|:|\.|\?/gm, "").toLowerCase(); //pre-process to remove interpunction, line breaks and uppercase letters.
@@ -39,12 +39,12 @@ for (var x=0; x < articleCount; x++) {
 	}
 }
 
-/* console.log('  Word to search: ' + wordToSearch);
+console.log('  Word to search: ' + wordToSearch);
 for (var x=0; x < articleCount; x++) {
 	if (_.isUndefined(wordlist[wordToSearch+x]) == false) {  // if-statement filters so it only returns documents where the word is found
 		console.log(wordlist[wordToSearch + x]);
 	}
-} */
+}
 
 
 /* below here, the histogram is generated */
@@ -77,7 +77,17 @@ for (var y=0; y < allArticles[0].length; y++) {
 		wordcountlist[allArticles[0][y]] = {count: allArticles[1][y]};
 }
 
-var allWordcounts = Object.keys(wordcountlist).map(k => wordcountlist[k].count);
+var allWordcounts = Object.keys(wordcountlist).map(k => wordcountlist[k].count); // take the wordcounts out of the wordcountlist and put them in an array
 
-console.log(allWordcounts.length);
 
+var data = [
+	{
+		x: allWordcounts,
+		type: "histogram"
+	}
+];
+var graphOptions = {filename: "basic-histogram", fileopt: "overwrite"};
+plotly.plot(data, graphOptions, function (err, msg) {
+	console.log("Plotly plot:");
+	console.log(msg);
+});
